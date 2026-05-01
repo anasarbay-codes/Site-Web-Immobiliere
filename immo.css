@@ -1,0 +1,502 @@
+/* ================= VARIABLES & RESET ================= */
+:root {
+  --primary: #0A192F; /* Bleu Nuit très profond */
+  --primary-light: #172A46;
+  --gold: #D4AF37; /* Or métallique */
+  --gold-hover: #F2C94C;
+  --white: #FFFFFF;
+  --gray-light: #F4F5F7;
+  --text-dark: #1E1E1E;
+  --text-gray: #64748B;
+  
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Poppins', sans-serif;
+  
+  --shadow-card: 0 15px 35px rgba(0,0,0,0.06);
+  --shadow-hover: 0 25px 50px rgba(0,0,0,0.1);
+  --radius: 4px; /* Bordures légèrement arrondies mais carrées pour le sérieux */
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--text-dark);
+  background-color: var(--white);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  color: var(--primary);
+  font-weight: 700;
+}
+
+a { text-decoration: none; transition: 0.3s ease; }
+ul { list-style: none; }
+img { max-width: 100%; display: block; }
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.text-gold { color: var(--gold); }
+.section-padding { padding: 100px 0; }
+.bg-light { background-color: var(--gray-light); }
+.mt-5 { margin-top: 3rem; }
+.text-center { text-align: center; }
+
+/* ================= HEADER & NAV ================= */
+.site-header {
+  position: fixed;
+  top: 0; left: 0; width: 100%;
+  padding: 20px 0;
+  z-index: 1000;
+  transition: all 0.4s ease;
+  background: transparent; /* Transparent au début */
+}
+
+/* Classe ajoutée par JS au scroll */
+.site-header.scrolled {
+  background: rgba(10, 25, 47, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 15px 0;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-block {
+  font-family: var(--font-heading);
+  color: var(--white);
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-logo {
+  background: var(--gold);
+  color: var(--primary);
+  width: 40px; height: 40px;
+  display: flex; justify-content: center; align-items: center;
+  border-radius: 50%; /* Cercle */
+}
+
+.main-nav a {
+  color: rgba(255,255,255,0.8);
+  margin: 0 20px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  position: relative;
+}
+
+.main-nav a:hover, .main-nav a.active {
+  color: var(--gold);
+}
+
+.main-nav a::after {
+  content: '';
+  position: absolute; bottom: -5px; left: 0;
+  width: 0; height: 1px;
+  background: var(--gold);
+  transition: width 0.3s;
+}
+.main-nav a:hover::after { width: 100%; }
+
+.cta-outline {
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 10px 25px;
+  border-radius: 30px;
+  font-size: 0.9rem;
+}
+
+.cta-outline:hover {
+  background: var(--gold);
+  color: var(--primary);
+}
+
+/* ================= HERO SECTION ================= */
+.hero {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--white);
+  overflow: hidden;
+}
+
+.hero-video {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 100%; min-height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+
+.overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(10,25,47,0.6), rgba(10,25,47,0.3));
+  z-index: -1;
+}
+
+.hero-tagline {
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 0.5s;
+}
+
+.hero-title {
+  font-size: clamp(3rem, 6vw, 5rem); /* Responsive font size */
+  line-height: 1.1;
+  margin-bottom: 40px;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 0.7s;
+}
+
+.btn-primary {
+  background: var(--gold);
+  color: var(--primary);
+  padding: 15px 40px;
+  border-radius: 0; /* Bouton carré = luxe */
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: inline-block;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 0.9s;
+}
+
+.btn-primary:hover {
+  background: var(--white);
+}
+
+/* Scroll indicator */
+.scroll-down {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  opacity: 0.7;
+}
+
+.scroll-down .line {
+  width: 1px;
+  height: 50px;
+  background: var(--white);
+  animation: scrollLine 2s infinite;
+}
+
+@keyframes scrollLine {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  51% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(30px); }
+}
+
+/* ================= KPI SECTION ================= */
+.key-metrics {
+  background: var(--primary);
+  color: var(--white);
+  padding: 60px 0;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  text-align: center;
+  gap: 30px;
+}
+
+.metric-number {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  color: var(--gold);
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* ================= PROJETS (Cards Modernes) ================= */
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-header h2 { font-size: 2.5rem; margin-bottom: 10px; }
+.separator {
+  width: 60px; height: 3px; background: var(--gold); margin: 0 auto;
+}
+.subtitle { color: var(--text-gray); font-size: 1.1rem; }
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 40px;
+}
+
+.project-card {
+  background: var(--white);
+  box-shadow: var(--shadow-card);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.project-card:hover {
+  transform: translateY(-10px);
+  box-shadow: var(--shadow-hover);
+}
+
+.img-wrapper {
+  overflow: hidden;
+  height: 300px;
+}
+
+.img-wrapper img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.project-card:hover img { transform: scale(1.1); }
+
+.card-content {
+  padding: 30px;
+  position: relative;
+}
+
+.tag {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--gold);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.project-card h3 { font-size: 1.5rem; margin-bottom: 10px; }
+.project-card p { color: var(--text-gray); font-size: 0.95rem; }
+
+/* ================= PLANS (Grid asymétrique) ================= */
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.plan-item {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #eee;
+  cursor: zoom-in;
+  background: #fff;
+}
+
+.plan-item img {
+  width: 100%;
+  height: auto;
+  transition: opacity 0.3s;
+}
+
+.plan-overlay {
+  position: absolute; inset: 0;
+  background: rgba(10, 25, 47, 0.8);
+  display: flex; justify-content: center; align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.plan-overlay span {
+  color: var(--gold); border: 1px solid var(--gold);
+  padding: 8px 20px; text-transform: uppercase; font-size: 0.8rem;
+}
+
+.plan-item:hover .plan-overlay { opacity: 1; }
+
+.plan-info {
+  padding: 15px; text-align: center; border-top: 1px solid #f0f0f0;
+}
+.plan-info h4 { font-size: 1rem; margin: 0; }
+
+.btn-secondary {
+  display: inline-block;
+  color: var(--primary);
+  border-bottom: 2px solid var(--gold);
+  padding-bottom: 5px;
+  font-weight: 600;
+}
+.btn-secondary:hover { color: var(--gold); }
+
+/* ================= EXPERTISE ================= */
+.expertise-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+.expertise-card {
+  background: var(--white);
+  padding: 40px 30px;
+  border: 1px solid #eee;
+  transition: 0.3s;
+}
+.expertise-card:hover {
+  border-color: var(--gold);
+  background: var(--primary);
+}
+.expertise-card:hover h3, .expertise-card:hover p { color: var(--white); }
+.expertise-card .icon { font-size: 2.5rem; margin-bottom: 20px; }
+
+/* ================= CONTACT (Glassmorphism) ================= */
+.contact-section {
+  background: url('images/residance.jpg') no-repeat center center/cover;
+  position: relative;
+  /* Overlay sombre sur l'image de fond */
+  box-shadow: inset 0 0 0 1000px rgba(10, 25, 47, 0.85);
+}
+
+.contact-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  color: var(--white);
+}
+
+.contact-text h2 { color: var(--white); margin-bottom: 20px; }
+.contact-text p { color: rgba(255,255,255,0.7); margin-bottom: 30px; }
+
+.contact-details li { margin-bottom: 15px; font-size: 1.1rem; }
+.contact-details strong { color: var(--gold); margin-right: 10px; }
+
+/* Le formulaire "Verre" */
+.glass-form {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  padding: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+.form-group {
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.form-group input, .form-group textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.4);
+  padding: 10px 0;
+  color: var(--white);
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.form-group input:focus, .form-group textarea:focus {
+  outline: none;
+  border-bottom-color: var(--gold);
+}
+
+/* Floating label effect */
+.form-group label {
+  position: absolute;
+  top: 10px; left: 0;
+  color: rgba(255,255,255,0.6);
+  pointer-events: none;
+  transition: 0.3s ease;
+}
+
+.form-group input:focus ~ label,
+.form-group input:not(:placeholder-shown) ~ label,
+.form-group textarea:focus ~ label,
+.form-group textarea:not(:placeholder-shown) ~ label {
+  top: -20px;
+  font-size: 0.8rem;
+  color: var(--gold);
+}
+
+.full-width { width: 100%; border: none; cursor: pointer; }
+
+/* ================= FOOTER ================= */
+.site-footer {
+  background: #050d1a;
+  padding: 40px 0;
+  color: rgba(255,255,255,0.4);
+  font-size: 0.9rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.footer-content {
+  display: flex; justify-content: space-between;
+}
+.footer-links a { color: inherit; margin-left: 20px; }
+.footer-links a:hover { color: var(--gold); }
+
+/* ================= LIGHTBOX ================= */
+.lightbox {
+  position: fixed; z-index: 2000;
+  left: 0; top: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.9);
+  display: none; justify-content: center; align-items: center;
+  opacity: 0; transition: opacity 0.3s ease;
+}
+.lightbox.active { display: flex; opacity: 1; }
+.lightbox-content {
+  max-width: 90%; max-height: 90%;
+  border: 2px solid var(--gold);
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+.close-lightbox {
+  position: absolute; top: 20px; right: 30px;
+  color: var(--white); font-size: 40px; cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-title { font-size: 2.5rem; }
+  .contact-wrapper { grid-template-columns: 1fr; }
+  .header-inner .main-nav { display: none; } /* Faudrait un script burger */
+}
+/* Ajout pour les liens des projets */
+.project-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block; /* Important pour que le lien prenne toute la place */
+}
+
+/* S'assurer que le titre dans la carte ne devient pas bleu comme un lien classique */
+.project-card-link h3 {
+    color: var(--primary);
+    transition: color 0.3s;
+}
+
+.project-card-link:hover h3 {
+    color: var(--gold);
+}

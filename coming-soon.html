@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Projet en cours | MAYSANNE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  
+  <style>
+    /* Style spécifique Compte à rebours */
+    body { background: var(--primary); color: white; overflow: hidden; }
+    
+    .countdown-section {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        background: radial-gradient(circle at center, #172a46 0%, #0a192f 100%);
+    }
+
+    .coming-title {
+        font-size: 4rem;
+        margin-bottom: 10px;
+        color: var(--white);
+    }
+
+    .coming-subtitle {
+        color: var(--gold);
+        font-size: 1.5rem;
+        margin-bottom: 60px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    /* Le Timer */
+    .timer-container {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 50px;
+    }
+
+    .time-box {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        padding: 30px;
+        min-width: 140px;
+        border-radius: 8px;
+        backdrop-filter: blur(5px);
+    }
+
+    .time-box span {
+        display: block;
+    }
+
+    .number {
+        font-family: 'Playfair Display', serif;
+        font-size: 4rem;
+        font-weight: 700;
+        color: var(--gold);
+        line-height: 1;
+    }
+
+    .label {
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        margin-top: 10px;
+        color: rgba(255,255,255,0.6);
+    }
+
+    .notify-btn {
+        padding: 15px 40px;
+        background: transparent;
+        border: 2px solid var(--gold);
+        color: var(--gold);
+        font-size: 1rem;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .notify-btn:hover { background: var(--gold); color: var(--primary); }
+
+    /* Responsive */
+    @media(max-width: 768px) {
+        .timer-container { gap: 10px; flex-wrap: wrap; justify-content: center; }
+        .time-box { min-width: 80px; padding: 15px; }
+        .number { font-size: 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="immo.html" class="back-btn" style="position:fixed; top:30px; left:30px; color:white;">← Retour</a>
+
+  <section class="countdown-section">
+    <div class="container">
+      <h1 class="coming-title">Vision 2027</h1>
+      <p class="coming-subtitle">Lancement Officiel</p>
+
+      <div class="timer-container">
+        <div class="time-box">
+          <span class="number" id="days">00</span>
+          <span class="label">Jours</span>
+        </div>
+        <div class="time-box">
+          <span class="number" id="hours">00</span>
+          <span class="label">Heures</span>
+        </div>
+        <div class="time-box">
+          <span class="number" id="minutes">00</span>
+          <span class="label">Minutes</span>
+        </div>
+        <div class="time-box">
+          <span class="number" id="seconds">00</span>
+          <span class="label">Secondes</span>
+        </div>
+      </div>
+
+      <p style="margin-bottom:30px; opacity:0.7;">Restez connecté pour découvrir l'avenir de l'immobilier.</p>
+      <button class="notify-btn" onclick="alert('Vous serez notifié !')">Être notifié</button>
+    </div>
+  </section>
+
+  <script>
+    // --- SCRIPT DU COMPTE A REBOURS ---
+    
+    // Date cible : 1er Janvier 2027
+    const countToDate = new Date("Jan 1, 2027 00:00:00").getTime();
+
+    const timer = setInterval(function() {
+        const now = new Date().getTime();
+        const distance = countToDate - now;
+
+        // Calculs mathématiques pour jours, heures, minutes, secondes
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Affichage dans le HTML
+        document.getElementById("days").innerText = days;
+        document.getElementById("hours").innerText = hours;
+        document.getElementById("minutes").innerText = minutes;
+        document.getElementById("seconds").innerText = seconds;
+
+        // Si le compte est fini
+        if (distance < 0) {
+            clearInterval(timer);
+            document.querySelector(".timer-container").innerHTML = "<h2>Le projet est lancé !</h2>";
+        }
+    }, 1000);
+  </script>
+
+</body>
+</html>
